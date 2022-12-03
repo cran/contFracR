@@ -3,6 +3,9 @@
 #   move original b1 inside the a1....an sequence and setting the new b1 == 0
 # and for numerator, prepend a "1" 
 # generate terms for 1/X 
+
+#TODO  even tho' these are primarily helper funcs, add input validation 
+
 recipCfrac <- function( denom, num = 1, ...){
 # ensure proper lengths
 num <- rep(num,length=length(denom) -1)

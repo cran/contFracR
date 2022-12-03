@@ -4,6 +4,10 @@
 # 2008, Coleman and Pickett
 #pi/2 =  {1; series(2,N,1/j)}  i.e  1 +  denoms 1, 1/2, 1/3, 1/4 .....
 
+
+# TODO revisions Nov 2022: more input validation, e.g. nterms <- floor(nterms) 
+# pi2cfrac: in future , should check for unambiguous shortened method names.The ones currently in existence start with different letters.  
+
 pi2cfrac <- function(nterms, method = c('brouncker','stern','coleman'),...) {
 method <- tolower(method[1])
 goody <- c('brouncker','stern', 'coleman')
@@ -46,6 +50,8 @@ return(invisible(list( nterms=nterms, method=method, num=num,denom=denom )) )
 # Euler, or possibly Gauss via hyperbolic functions: 
 # e^(x/y) = 1 +numseq(2x,x^2,x^2,x^2,...) ; denomseq(2y-x,6y,10y,14y, 18y, 22y,..)
 # which, annoyingly, for y == x == 1, gives denoms 2,6,10,14,.. because the nums aren't all 1
+
+#see note at pi2cfrac about confusing method names when shortened
 
 e2cfrac <- function(nterms, pownum = 1, powdenom = 1,  method = c('euler','wall','gauss'), ...){
 method <- tolower(method[1])

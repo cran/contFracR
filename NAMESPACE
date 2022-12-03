@@ -1,6 +1,6 @@
 exportPattern("^[[:alpha:]]+")
 importFrom("gmp", "as.bigz", "as.bigq","pow.bigq", "is.bigz", "numerator" , "denominator")
-importFrom("Rmpfr", "mpfr", ".bigq2mpfr", ".mpfr2bigz")
+importFrom("Rmpfr", "mpfr", ".bigq2mpfr", ".mpfr2bigz", ".bigz2mpfr")
 importFrom("go2bigq", "go2bigq")
 importFrom("methods", "is")
 importFrom("utils", "tail")

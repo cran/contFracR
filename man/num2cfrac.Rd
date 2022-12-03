@@ -29,11 +29,12 @@ Reserved for future use.
 The use of \code{mpfr} - class numbers is deliberately disallowed, because the small but generally present binary vs. decimal rounding error will lead to horrific continued fraction representations.
 As noted above, character strings must be in the form [+,-][X][.][Y][[E,e][+,-]Z]  where X,Y, and Z are strings of numerals. To be explicit: if an exponent is desired, the "+, -" sign is optional but the numeric value Z is required. 
 
-While irrationals can't be expressed as a finite-digit number, by entering as many digits of a known approximation as desired, the equivalent close approximation as a finite continued fraction can be generated. 
+While irrationals can't be expressed as a finite-digit number, by entering as many digits of a known approximation as desired, the equivalent close approximation as a finite continued fraction can be generated.  See the functions \code{\link[contFracR]{pi2cfrac}}, \code{\link[contFracR]{phi2cfrac}}, \code{\link[contFracR]{e2cfrac}} to generate as many elements of these known generators as desired. 
  
 }
 \value{
-The denominators are returned as a \code{bigz} integer vector in \code{denom}.  The actual numerator and denominator values used in the continued fraction creation are echoed back as \code{bigz} integers in \code{numdenom} .  For example, if the input numerator and denominator were 6 and 15, the values 2 and 5 (reduced fraction) would be returned.  Or, if the numerator input is the character string "1.25" , then the values 5 and 4 will be returned.   
+The denominators are returned as a \code{bigz} integer vector in \code{denom}.  The actual numerator and denominator values used in the continued fraction creation are echoed back as \code{bigz} integers in \code{numdenom} .  For example, if the input numerator and denominator were 6 and 15, the values 2 and 5 (reduced fraction) would be returned.  Or, if the numerator input is the character string "1.25" , then the values 5 and 4 will be returned. 
+The numerators (A) and denominators (B) of the convergents are provided in \code{convA} and \code{convB}
 }
 
 \author{

@@ -23,7 +23,7 @@ In those cases where the denominator values repeat (e.g., for continued fraction
 
 }
   \item{nreps}{	
-Only applicable if \code{denoms} is a single value.  Repeat that value \code{nreps} times to set up the continued fraction
+If \code{denoms} is a single value, repeat that value \code{nreps} times to set up the continued fraction. Otherwise, assume a periodic denominator sequence was submitted, and repeat the \code{denom[-1] } section \code{nreps} times (the first denominator is the integer term) . 
 }
 
 \item{msgrate}{
@@ -37,7 +37,9 @@ All calculations are done with \code{\link[gmp]{bigq}} fractions to preserve ful
  
 }
 \value{
-The exact numeric value is provided in \code{cgmp}, a \code{bigq} fraction.  The \code{cmpfr} value is calculated using \code{\link[Rmpfr]{.bigq2mpfr}}, which generates a decimal number of sufficient precision to match the implied precision of the fraction.  \code{fracpart} equals \code{cgmp} minus the integer part, if any. \code{denom} and \code{num} provide the vectors of denominator and numerator values used in the calculation. 
+The exact numeric value is provided in \code{cgmp}, a \code{bigq} fraction.  The \code{mpfr} value is calculated using \code{\link[Rmpfr]{.bigq2mpfr}}, which generates a decimal number of sufficient precision to match the implied precision of the fraction. 
+ \code{fracpart} equals \code{cgmp} minus the integer part, if any. 
+ \code{denom} and \code{num} provide the vectors of denominator and numerator values used in the calculation. 
  
 }
 

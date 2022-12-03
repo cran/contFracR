@@ -16,7 +16,7 @@ sqrt2periodicCfrac(num, denom = 1,  nterms = 50, ...)
  An integer, \code{bigz} integer, or a character string form of an integer,  representing the number or the numerator of the number for which the continued fraction form of the square root is to be generated. 
 }
   \item{denom}{	
- An integer ,\code{bigz} integer, or a character string form of an integer,representing  the denominator of the number for which the continued fraction form of the square root is to be generated. The default value is 1
+ An integer ,\code{bigz} integer, or a character string form of an integer,representing  the denominator of the number for which the continued fraction form of the square root is to be generated. The default value is 1. If \code{denom} is not 1, the values returned must be divided by the denominator. See the Details section. 
  }
   \item{nterms}{	
 The maximum number of terms (denominators) to calculate. This is a "safety" limit in case the denominator repeat pattern turns out to be extremely long.  See the Details section. 
@@ -28,6 +28,7 @@ Reserved for future use.
 }
 \details{
 As discussed in the references, this algorithm will produce a periodic sequence of denominator values for any rational input value. 
+Important note: the algorithm actually calculates the square root of \code{num * denom} because it only works properly with integers. Thus, if \code{num/denom} is not an integer, you must divide the results by the value of the denominator to get the correct square root.
 If the returned value of \code{repeated} is "FALSE" then increase the input argument \code{nterms}.  The default value (50) exists so that the function can terminate rather than spend (possibly undesired) time calculating extremely long denominator repeat sequences. 
  
  
@@ -38,6 +39,7 @@ The continued fraction numerators and denominators in \code{bigz} form \code{num
 The continued fraction numerators and denominators in numeric form \code{numericnum}, \code{numericdenom} .  In the extreme case that a value exceeds the machine size of a numeric, \code{NA} is returned.
 \code{repeated} returns TRUE if the denominator repeat argument is found, and FALSE if not. 
 \code{input} echoes back the input num and denom arguments. 
+The numerators (A) and denominators (B) of the convergents are provided in \code{convA} and \code{convB}
 
 }
 
@@ -53,15 +55,10 @@ Proof of periodicity:
 Carl Witthoft,  \email{carl@witthoft.com} 
 }
 
-\seealso{
-\code{\link[base]{strtoi}}
-}
 
 \examples{
-sqrt2periodicCfrac('101011',2,10)
-sqrt2periodicCfrac(101011,2,10)
-sqrt2periodicCfrac('4r8s',30,10)
-sqrt2periodicCfrac('101011',12,5)
-
+sqrt2periodicCfrac(12)
+sqrt2periodicCfrac('12')
+sqrt2periodicCfrac(12,7)
 
 }

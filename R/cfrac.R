@@ -6,6 +6,18 @@
 #  you can calculate irrationals to arbitrary precision by setting the inputs to  num = (irat_num)*1eN , denom = 1eN for N some nice integer
 # mpfr values not allowed because teensy rounding errors, e.g. "3.2400000000001" make  a hash of the fraction
 
+#TODO revision Nov 2022: think about any other possible input validation to add
+#	 can I calc convergents along the way?  
+# to get convergents WHILE calculating the cfrac, use recursion formulas. bj are denoms with b0 the integer part,  aj are nums.
+
+# "starter values A[-1] = 1, B[-1] = 0
+
+#  A0 = b0 
+#  B0 = 1
+# Aj = bj*A(j-1) + aj*A[j-2]
+# Bj =  bj*B[n-1] + aj*B[n-2] 
+#
+#
 num2cfrac <-function(num, denom = 1, ...) {
 if(length(num) >1 ) {
 	warning('only using first element of num')
@@ -37,19 +49,32 @@ thesign <- sign(thebigq)
 ND <- numdenom 
 if (numdenom[2] == 0 || numdenom[1] == 0 ) stop('zeros not allowed')
 if (numdenom[1] == 1) return (invisible(list(intvec = c(0,denom), numdenom = ND) ) )
-intvec = as.bigz(NULL)  #NOT a R-vector, but NULL will be "replaced" with first value assigned.  
-jlev = 1 # start vector index
+# intvec = as.bigz(NULL)  #NOT a R-vector, but NULL will be "replaced" with first value assigned.  
+jlev = 2   # start vector index, with offset for A[-1] stuff
+
+# initialize convergents. Notice that first elements are the "minus 1" indices
+# since all nums are 1 at this point, can substitute that in for a[j]
+#  browser()
+ intvec <- bzero <- floor(numdenom[1]/numdenom[2] )
+ 
+	num = numdenom[1] - (intvec * numdenom[2] )
+	numdenom = c(numdenom[2],num) # reciprocalling
+A <- c( as.bigz(1) , bzero )  #otherwise coercion screws up bigz value 
+B <- as.bigz(c(0 ,1)) 
 # numerator == 0 means there was a common factor; this is easiest way to catch it.
 # rats: is.element, %in% don't like bigq
 #while (!is.element(numdenom[1], c(0,1)) && numdenom[2] != 0 ) {
-while(numdenom[1] !=1 && numdenom[1] != 0&&numdenom[2]!= 0){
+while(numdenom[1] !=1 && numdenom[1] != 0 && numdenom[2]!= 0){
 	intvec = c(intvec,  floor(numdenom[1]/numdenom[2] ) )
 	num = numdenom[1] - (intvec[jlev] * numdenom[2] )
 	numdenom = c(numdenom[2],num) # reciprocalling
+# numdenom is "internal" calc. The next denom is latest intvec
+	A[jlev + 1] <- intvec[jlev] * A[jlev ] +  A[jlev -1]
+	B[jlev + 1] <- intvec[jlev] * B[jlev ] +  B[jlev -1]
 	 jlev = jlev + 1
 	}
 intvec <- intvec * thesign
-return(invisible(list(denom = intvec , numdenom = ND  )) )
+return(invisible(list(denom = intvec , numdenom = ND ,convA = A, convB = B )) )
 }
 
 
@@ -103,15 +128,29 @@ return(invisible(list(eqn=eqn, tex2copy = tex2copy, texeqn = texeqn)) )
 }
 
 
-#calculating numeric value of a continued fraction representation ,
+# calculating numeric value of a continued fraction representation ,
 # where K is either the Continued Fraction form sequence of integers, or a single value
 # if the particular source is that value repeated 'numterms' times. 
+# Input 'nreps' is how many times to repeat a single-value denom input
+#
 # outputs
 #	cgmp is the gmp num&denom
 #	cmpfr is the mpfr conversion of cgmp
 #	nums, denoms returns the input vectors used
 
-#TODO: check for list inputs and either ban them or unlist(carefully)
+# TODO: check for list inputs and either ban them or unlist(carefully)
+# Revision TODO Nov 2022.  Per Hans Borcher,  
+# cfrac2num(c(0, 1,-1,1)); x
+# Error in `/.bigq`(num[[kk]], spart) : division by zero
+
+#  One can certainly argue whether negative entries shall be allowed for continued
+#  fractions, but I think it will be better if the function will check the input instead of 
+#  the system.
+
+#  store every convergent , not just the final one (cgmp)  for people to play with  
+
+#BUGFIX: nreps fouls up when length of denom is bigger, as it will be for a periodic 
+#  contfrac resulting from a square root, for example. 
 cfrac2num  <- function(denom, num = 1, init = 0, nreps= 1, msgrate = NULL ) {
 if (length(denom) == 1){
 #  "exit strategy" when denoms == 0.  
@@ -125,7 +164,11 @@ if (length(denom) == 1){
         if (length(denom) == 1) {
                 return(invisible(list(cgmp = as.bigq(denom), mdec=mpfr(denom,10),denom = denom, num = num)))
                 }
+        } else {
+      # Now apply nreps to a putatively periodic denominator
+   			denom <- c(denom[1], rep(denom[-1],times=nreps))
         }
+
 #  expand num to be  length(denom) -1  if it isn't already (first denom is the integer)
 #  and if length(num) == 1 , repeat it by nterms-1
 if( !is(num[[1]],'bigq')){
@@ -138,9 +181,11 @@ if (!is(denom[[1]],'bigq')) {
 }else{
 	Kq <- denom
 }
-# just this?
-#spart <- init
+# initalize
 spart <- ( tail(Kq, 1) )[[1]] + init 
+# new: save all convergents
+#  NOPE:  convergents have to be calc'd from start, not end 
+#  conv <- spart
 # add a status msg. Also notice reverse order as befits unwinding a cont frac
 loopvals <- (length(denom) - 1):1
 if (!is.null(msgrate)){
@@ -149,14 +194,17 @@ if (!is.null(msgrate)){
 	for (kk in loopvals) {
 		if ( kk %in% msgnums) message('kk is now ', kk)
         spart <- Kq[kk] + num[kk] /spart  #1 / spart
+ #       conv <- c(conv, spart)
         }
 	
 	} else {
 		for (kk in loopvals) {
-		spart <- Kq[[kk]] + num[[kk]] /spart  #1 / spart
+			spart <- Kq[[kk]] + num[[kk]] /spart  #1 / spart
+#		conv <- c(conv, spart)
+        }
 		}
-	}
-mdec <- .bigq2mpfr(spart) #no reason to apply nonoptimal nbr bits
+	
+mdec <- .bigq2mpfr(spart) # no reason to apply nonoptimal nbr bits
 fracpart <- spart - Kq[[kk]]
 return(invisible(list(cgmp = spart, cmpfr = mdec, fracpart = fracpart, denom = denom, num = num)))
 }
