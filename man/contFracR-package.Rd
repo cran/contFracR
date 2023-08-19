@@ -7,16 +7,7 @@
 This package includes functions to convert a rational number to its continued fraction form, to convert any defined continued fraction to a numeric value, and to generate estimates of some common irrationals (e, pi, phi) via continued fraction representations. There's also a function which  generates LaTeX code to draw the continued fraction itself. 
  
 }
-\details{
-\tabular{ll}{
-Package: \tab contFracR\cr
-Type: \tab Package\cr
-Version: \tab 1.0\cr
-Date: \tab 2022-03-25\cr
-License: \tab GPL-3 \cr
-}
 
-}
 \author{
 Carl Witthoft, with attributions as noted in the individual help pages
 

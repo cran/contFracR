@@ -1,3 +1,4 @@
 * Rev 1.0 Initial Release
 * Rev 1.1 Improved input validation, added convergents to output, added Pell's eqn. Minor bugfixes
 * Rev 1.2 Fixed bug; improved capabilities of 'cfrac2num' function
+* Rev 1.2.1 Fixed mismatch in documentation

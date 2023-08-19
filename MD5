@@ -1,7 +1,7 @@
-2539525118cfbb1684063ac454c3df22 *ChangeLog
-65a4bf981f90c6a9dae2930f3222b66f *DESCRIPTION
+926734e1a48544da95b4c49fef9cf6c1 *ChangeLog
+d12c5689a8478a615f81c033e9b0e34d *DESCRIPTION
 dbef16da3dfd743c2445cd2403e250da *NAMESPACE
-4d66295c10a4f33a8a3ef1932466f40d *R/cfrac.R
+1381d007c61858dad0d36b8b487be89e *R/cfrac.R
 59dcaee4d048da1279313a8ba9f9ddbb *R/fracHelpers.r
 dcaf23bc27f8b1fb2c25da92e191bdd0 *R/pell.r
 797e04a9c8753dd2a21ae9efabee417d *R/root2cfrac.R
@@ -10,7 +10,7 @@ cee3cdb0dde176e55679e4aeaf0475b4 *R/sqrt2periodicCfrac.R
 87d945ce1990b788fce1cddc01cad3c0 *man/cfrac2latex.Rd
 38104a7f2a9224c9e0fa22c7a7981051 *man/cfrac2num.Rd
 527d800f2060fb05f28065bfa7e525ed *man/cfrac2simple.Rd
-8e0d93bc392fa417507d9b5fd1db9715 *man/contFracR-package.Rd
+0be0c3669896b85360e21dc5c20c424d *man/contFracR-package.Rd
 8bbd5e8f2ed5553392e5e7c681485345 *man/e2cfrac.Rd
 f2d1775ec692815f18733fdaa512ff86 *man/num2cfrac.Rd
 b638a525538b6e45ff483ed8dedbb333 *man/pell.Rd

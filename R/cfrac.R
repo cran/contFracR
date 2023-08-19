@@ -7,7 +7,8 @@
 # mpfr values not allowed because teensy rounding errors, e.g. "3.2400000000001" make  a hash of the fraction
 
 #TODO revision Nov 2022: think about any other possible input validation to add
-#	 can I calc convergents along the way?  
+#	
+# Feb 2023:  removed the first "dummy" terms from the output convergents.  
 # to get convergents WHILE calculating the cfrac, use recursion formulas. bj are denoms with b0 the integer part,  aj are nums.
 
 # "starter values A[-1] = 1, B[-1] = 0
@@ -74,7 +75,8 @@ while(numdenom[1] !=1 && numdenom[1] != 0 && numdenom[2]!= 0){
 	 jlev = jlev + 1
 	}
 intvec <- intvec * thesign
-return(invisible(list(denom = intvec , numdenom = ND ,convA = A, convB = B )) )
+# don't want the dummy convergent terms
+return(invisible(list(denom = intvec , numdenom = ND ,convA = A[-1], convB = B[-1] )) )
 }
 
 
